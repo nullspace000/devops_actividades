@@ -1,0 +1,6 @@
+1. Inspeccioné la página de la actividad.
+2. Copié el contenido del div de las instrucciones.
+3. Pegué el conteido en mi plantilla de documento html
+4. Descargué la página con save as.
+5. Repliqué la estructura de directorios que llaman los elementos <img>
+6. Pegué las imagenes en el directorio final. 
