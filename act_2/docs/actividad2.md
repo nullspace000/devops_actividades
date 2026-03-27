@@ -95,6 +95,23 @@ if __name__ == "__main__":
 ```
 
 d. **Automatización con Bash:**
+```
+#!/bin/bash
+
+# Script para automatizar la gestión de EC2
+INSTANCIA_ID="i-0123456789abcdef0" # Cambia esto por tu ID real
+
+echo "Ejecutando mantenimiento de EC2..."
+
+# 1. Listar el estado actual
+python3 gestionar_ec2.py
+
+# 2. Ejemplo de lógica: Detener la instancia si es fin de semana (opcional)
+# O simplemente ejecutar una acción directa:
+python3 gestionar_ec2.py $INSTANCIA_ID detener
+
+echo "Proceso finalizado."
+```
 ### **3.** Crea un script en **Bash (backup_s3.sh)** para generar un **respaldo** de archivos y enviarlo a un **bucket S3** 
 
 a. El script debe:
