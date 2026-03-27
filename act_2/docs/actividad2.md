@@ -29,7 +29,6 @@ c. Desarrolla un script en **Python (gestionar_ec2.py)** que realice las siguien
 
 Codigo base sugerido en Python:
 
-d. **Automatización con Bash:**
 ```
 import boto3
 
@@ -53,6 +52,7 @@ if __name__ == "__main__":
     listar_instancias()
     gestionar_instancia("ID_INSTANCIA", "iniciar")  # Reemplazar ID_INSTANCIA según corresponda.
 ```
+d. **Automatización con Bash:**
 ### **3.** Crea un script en **Bash (backup_s3.sh)** para generar un **respaldo** de archivos y enviarlo a un **bucket S3** 
 
 a. El script debe:
