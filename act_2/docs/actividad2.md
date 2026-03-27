@@ -12,12 +12,14 @@ a. Instala y configuta **Boto3** en el entrono si no está disponible:
 ``` 
 pip install boto3
 ```
-![Verificamos que boto3 estuviera instalado.](imgs/1.png "Verificamos que boto3 estuviera instalado.")
+![](imgs/1.png)
 
 b. Configura las credenciales de AWS si es necesario:
 ```
 aws configure
 ```
+![](imgs/1.png)
+
 **Nota.** En Learner Lab, el perfil **LabRole** ya está disponible, por lo que no se deben crear nuevas claves de acceso.
 c. Desarrolla un script en **Python (gestionar_ec2.py)** que realice las siguientes accciones:
 * Listar todas las instancias en la región de su estado actual.
