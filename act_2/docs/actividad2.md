@@ -12,6 +12,7 @@ a. Instala y configuta **Boto3** en el entrono si no está disponible:
 ``` 
 pip install boto3
 ```
+![Verificamos que boto3 estuviera instalado.](imgs/1.png "Verificamos que boto3 estuviera instalado.")
 
 b. Configura las credenciales de AWS si es necesario:
 ```
