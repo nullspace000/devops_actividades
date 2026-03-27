@@ -29,13 +29,25 @@ d. **Automatización con Bash:**
 ```
 import boto3
 
-ec2 = boto3client('ec2',region_name='us-east-1')
+ec2 = boto3.client('ec2', region_name='us-east-1')
 
 def listar_instancias():
-  response = ec2.describe_instances()
-  for reservation in response['Reservation']:
-    for instance in reservation['instances']:
-      print
+    response = ec2.describe_instances()
+    for reservation in response['Reservations']:
+        for instance in reservation['Instances']:
+            print(f"ID: {instance['InstanceId']}, Estado: {instance['State']['Name']}")
+
+def gestionar_instancia(instancia_id, accion):
+    if accion == "iniciar":
+        ec2.start_instances(InstanceIds=[instancia_id])
+        print(f"Instancia {instancia_id} iniciada.")
+    elif accion == "detener":
+        ec2.stop_instances(InstanceIds=[instancia_id])
+        print(f"Instancia {instancia_id} detenida.")
+
+if __name__ == "__main__":
+    listar_instancias()
+    gestionar_instancia("ID_INSTANCIA", "iniciar")  # Reemplazar ID_INSTANCIA según corresponda.
 ```
 ### **3.** Crea un script en **Bash (backup_s3.sh)** para generar un **respaldo** de archivos y enviarlo a un **bucket S3** 
 
@@ -44,8 +56,23 @@ a. El script debe:
 * Subir el archivo comprimido a un **buckket S3** en la misma región.
 * Generar un log con destalles de la operación.
 
-b. Código base sugerido en bach:
+b. Código base sugerido en bash:
 ```
+#!/bin/bash
+
+BUCKET_NAME="mi-bucket-ejemplo"
+BACKUP_FILE="backup_$(date +%F).tar.gz"
+LOG_FILE="backup.log"
+
+echo "Iniciando respaldo..." >> $LOG_FILE
+tar -czf $BACKUP_FILE /ruta/a/respaldo >> $LOG_FILE 2>&1
+
+if aws s3 cp $BACKUP_FILE s3://$BUCKET_NAME/ >> $LOG_FILE 2>&1; then
+    echo "Respaldo subido exitosamente." >> $LOG_FILE
+else
+    echo "Error en la subida del respaldo." >> $LOG_FILE
+
+fi
 ```
 ### Ejecución y validación:
 a. Ejecuta el script de **Python** y verifica que las instancias se listan y gestionan correctamente.
@@ -56,4 +83,3 @@ c. Consulta los logs generados para asegurar que no hay errores en la ejecución
 
 a. Asegura que los scripts no contienen credenciales en texto plano.
 b. Implementa manejo de excepciones en **Python** y validaciones en **Bash** para evitar fallos inesperados.
-
