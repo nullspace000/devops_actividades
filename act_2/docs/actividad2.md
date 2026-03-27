@@ -21,6 +21,7 @@ aws configure
 ![](imgs/1.png)
 
 **Nota.** En Learner Lab, el perfil **LabRole** ya está disponible, por lo que no se deben crear nuevas claves de acceso.
+
 c. Desarrolla un script en **Python (gestionar_ec2.py)** que realice las siguientes accciones:
 * Listar todas las instancias en la región de su estado actual.
 * Iniciar una instancia específica si está detendia.
