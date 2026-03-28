@@ -118,19 +118,32 @@ Santiago Atahualpa
    ```
     #!/bin/bash
     
-    # Script para automatizar la gestión de EC2
-    INSTANCIA_ID="i-0123456789abcdef0" # Cambia esto por tu ID real
+    # ID de la instancia que quieres gestionar
+    INSTANCIA_ID="i-0123456789abcdef0" # <--- REEMPLAZA CON TU ID REAL
     
-    echo "Ejecutando mantenimiento de EC2..."
+    # Obtener el día de la semana actual (1-7, donde 6 y 7 son fin de semana)
+    DIA_SEMANA=$(date +%u)
     
-    # 1. Listar el estado actual
+    echo "=========================================="
+    echo "Iniciando mantenimiento de EC2: $(date)"
+    echo "=========================================="
+    
+    # 1. Listar el estado actual de todas las instancias
+    echo "Estado actual de la región:"
     python3 gestionar_ec2.py
     
-    # 2. Ejemplo de lógica: Detener la instancia si es fin de semana (opcional)
-    # O simplemente ejecutar una acción directa:
-    python3 gestionar_ec2.py $INSTANCIA_ID detener
+    # 2. Lógica de automatización por fin de semana
+    if [ "$DIA_SEMANA" -eq 6 ] || [ "$DIA_SEMANA" -eq 7 ]; then
+        echo "Detección: Es fin de semana. Procediendo a detener la instancia por ahorro."
+        python3 gestionar_ec2.py "$INSTANCIA_ID" detener
+    else
+        echo "Detección: Es día laboral. No se realizarán paradas automáticas."
+        # Opcional: Podrías poner aquí un comando para iniciarla si quieres que siempre esté prendida
+        # python3 gestionar_ec2.py "$INSTANCIA_ID" iniciar
+    fi
     
-    echo "Proceso finalizado."
+    echo "=========================================="
+    echo "Proceso finalizado con éxito."
    ```
 
 ## 3. Crea un script en Bash (backup_s3.sh) para generar un respaldo de archivos y enviarlo a un bucket S3
@@ -157,10 +170,65 @@ else
 fi
 ```
 
+Código Final:
+```
+#!/bin/bash
+
+# --- Configuration ---
+BUCKET_NAME="mi-bucket-ejemplo"
+SOURCE_DIR="/home/ec2-user/data"  # Change this to the folder you want to back up
+BACKUP_NAME="backup_$(date +%Y-%m-%d_%H%M%S).tar.gz"
+LOG_FILE="backup.log"
+
+# --- Execution ---
+echo "--- Respaldo iniciado: $(date) ---" >> "$LOG_FILE"
+
+# 1. Check if source directory exists
+if [ ! -d "$SOURCE_DIR" ]; then
+    echo "ERROR: El directorio $SOURCE_DIR no existe." >> "$LOG_FILE"
+    exit 1
+fi
+
+# 2. Create the compressed archive
+# 'c' create, 'z' gzip, 'f' file
+tar -czf "$BACKUP_NAME" "$SOURCE_DIR" >> "$LOG_FILE" 2>&1
+
+# 3. Upload to S3 and check for success
+if aws s3 cp "$BACKUP_NAME" "s3://$BUCKET_NAME/" >> "$LOG_FILE" 2>&1; then
+    echo "SUCCESS: Respaldo $BACKUP_NAME subido correctamente." >> "$LOG_FILE"
+    # Optional: Remove local backup file after successful upload to save space
+    # rm "$BACKUP_NAME"
+else
+    echo "ERROR: Falló la subida a S3. Revisa los permisos o la conexión." >> "$LOG_FILE"
+fi
+
+echo "--- Fin del proceso: $(date) ---" >> "$LOG_FILE"
+echo "" >> "$LOG_FILE"
+```
+
 ## 4. Ejecución y validación
-1. Ejecuta el script de Python y verifica que las instancias se listan y gestionan correctamente.
-2. Ejecuta el script de Bash y comprueba que el archivo se genera y sube a S3 exitosamente.
-3. Consulta los logs generados para asegurar que no hay errores en la ejecución.
+1. Ejecuta el script de Python y verifica que las instancias se listan y gestionan correctamente.  
+
+   Las instancias se listan correctamente:
+   ```
+   code $ python3 gestionar_ec2.py 
+   --- Listado de Instancias ---
+   ID: i-00e2ef44de3d9da57 | Estado: stopped
+   -----------------------------
+   Uso: python gestionar_ec2.py <ID_INSTANCIA> <iniciar|detener>
+   ```
+
+   Ahora con los parámetros para iniciar la instancia listada:
+   ```
+   code $ python3 gestionar_ec2.py i-00e2ef44de3d9da57 iniciar
+   Comando enviado: Iniciando i-00e2ef44de3d9da57...
+   ```
+
+   La instancia inicia correctamente:
+   ![screenshot](imgs/1.png)
+   
+3. Ejecuta el script de Bash y comprueba que el archivo se genera y sube a S3 exitosamente.
+4. Consulta los logs generados para asegurar que no hay errores en la ejecución.
 ## 5. Optimización y Seguridad
 - Asegura que los scripts no contienen credenciales en texto plano.
 - Implementa manejo de excepciones en Python y validaciones en Bash para evitar fallos inesperados.
