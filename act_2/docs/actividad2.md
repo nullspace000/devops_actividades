@@ -175,8 +175,8 @@ Código Final:
 #!/bin/bash
 
 # --- Configuration ---
-BUCKET_NAME="mi-bucket-ejemplo"
-SOURCE_DIR="/home/ec2-user/data"  # Change this to the folder you want to back up
+BUCKET_NAME="act-2-backup"
+SOURCE_DIR="/home/cloudshell-user/to-backup"  # Change this to the folder you want to back up
 BACKUP_NAME="backup_$(date +%Y-%m-%d_%H%M%S).tar.gz"
 LOG_FILE="backup.log"
 
