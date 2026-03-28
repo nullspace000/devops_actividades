@@ -229,7 +229,22 @@ echo "" >> "$LOG_FILE"
    ![screenshot](imgs/1.png)
    
 3. Ejecuta el script de Bash y comprueba que el archivo se genera y sube a S3 exitosamente.
+   ```
+    code $ bash backup_s3.sh 
+    code $ ls
+    auto_ec2.sh  backup_2026-03-28_185257.tar.gz  backup.log  backup_s3.sh  gestionar_ec2.py
+   ```
+   ![screenshot](imgs/2.png)
+
 4. Consulta los logs generados para asegurar que no hay errores en la ejecución.
-## 5. Optimización y Seguridad
-- Asegura que los scripts no contienen credenciales en texto plano.
-- Implementa manejo de excepciones en Python y validaciones en Bash para evitar fallos inesperados.
+    ```
+    code $ cat backup.log
+    --- Respaldo iniciado: Sat Mar 28 06:52:57 PM UTC 2026 ---
+    tar: Removing leading `/' from member names
+    upload: ./backup_2026-03-28_185257.tar.gz to s3://act-2-backup/backup_2026-03-28_185257.tar.gz
+    SUCCESS: Respaldo backup_2026-03-28_185257.tar.gz subido correctamente.
+    --- Fin del proceso: Sat Mar 28 06:52:58 PM UTC 2026 ---
+
+    code $
+    ```
+
