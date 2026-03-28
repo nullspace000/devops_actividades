@@ -225,6 +225,7 @@ echo "" >> "$LOG_FILE"
    ```
 
    La instancia inicia correctamente:
+   
    ![screenshot](imgs/1.png)
    
 3. Ejecuta el script de Bash y comprueba que el archivo se genera y sube a S3 exitosamente.
