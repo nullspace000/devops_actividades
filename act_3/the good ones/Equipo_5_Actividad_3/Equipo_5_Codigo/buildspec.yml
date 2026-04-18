@@ -1,0 +1,19 @@
+version: 0.2
+phases:
+  pre_build:
+    commands:
+      - echo Conectando a Amazon ECR...
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 165030184909.dkr.ecr.us-east-1.amazonaws.com
+  build:
+    commands:
+      - echo Construyendo imagen...
+      - docker build -t mi-app-flask-repo .
+      - docker tag mi-app-flask-repo:latest 165030184909.dkr.ecr.us-east-1.amazonaws.com/mi-app-flask-repo:latest
+  post_build:
+    commands:
+      - echo Subiendo imagen a ECR...
+      - docker push 165030184909.dkr.ecr.us-east-1.amazonaws.com/mi-app-flask-repo:latest
+      - printf '[{"name":"CONTENEDOR_APP","imageUri":"%s"}]' 165030184909.dkr.ecr.us-east-1.amazonaws.com/mi-app-flask-repo:latest > imagedefinitions.json
+artifacts:
+  files:
+    - imagedefinitions.json
