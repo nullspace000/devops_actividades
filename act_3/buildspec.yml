@@ -1,0 +1,17 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo Iniciando sesión en Docker Hub...
+      # Si usas Docker Hub, aquí iría el login. Por ahora solo imprimiremos el mensaje.
+  build:
+    commands:
+      - echo Construyendo la imagen de Docker...
+      - docker build -t mi-app-flask ./app
+  post_build:
+    commands:
+      - echo Construcción completada el `date`
+artifacts:
+  files:
+    - '**/*'
