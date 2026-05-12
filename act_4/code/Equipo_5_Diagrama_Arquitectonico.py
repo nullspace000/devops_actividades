@@ -990,7 +990,7 @@ def build():
     body_buf.seek(0)
 
     # ── Merge cover + body
-    out = "/home/null/core_portable/Documents/Code/University_clases/DevOps/act_4/docs/Equipo_5_Diagrama_Arquitectonico.pdf"
+    out = "/home/null/core_portable/Documents/Code/University_clases/DevOps/act_4/code/Equipo_5_Diagrama_Arquitectonico.pdf"
     writer = PdfWriter()
     for src in [cover_buf, body_buf]:
         reader = PdfReader(src)
